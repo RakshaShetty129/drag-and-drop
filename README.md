@@ -1,300 +1,227 @@
-# angular-form-builder [![Build Status](https://secure.travis-ci.org/kelp404/angular-form-builder.png?branch=master)](http://travis-ci.org/kelp404/angular-form-builder) [![devDependency Status](https://david-dm.org/kelp404/angular-form-builder/dev-status.png?branch=master)](https://david-dm.org/kelp404/angular-form-builder#info=devDependencies&view=table)
+<h1 align="center">ASW Form Builder - Design dynamic web forms.</h1>
 
-[MIT License](http://www.opensource.org/licenses/mit-license.php)
+<p align="center">
+  <img src="asw.svg" alt="asw-logo" width="310px" height="100px"/>
+  <br>
+  <em>ASW Form Builder helps you with rapid development and designed web forms which includes several controls
+    <br> using Angular/Angular-Material and Bootstrap.</em>
+  <br>
+</p>
 
+<p align="center">
+  <a href="https://asoftwareworld.com/#/product/free-form-builder/demo"><strong>Angular form builder demo</strong></a>
+  <br>
+</p>
 
-This is an AngularJS form builder written in [CoffeeScript](http://coffeescript.org).
+<p align="center">
+  <a href="CONTRIBUTING.md">Contributing Guidelines</a>
+  ·
+  <a href="https://github.com/asoftwareworld/ASW-Form-Builder/issues">Submit an Issue</a>
+  ·
+  <a href="https://asoftwareworld.github.io/form-builder">Blog</a>
+  <br>
+  <br>
+</p>
 
+<p align="center">
+  <a href="https://circleci.com/gh/asoftwareworld/ASW-Form-Builder">
+    <img src="https://badge.fury.io/js/%40asoftwareworld%2Fform-builder.svg" alt="CI status" />
+  </a>&nbsp;
+  <a href="https://www.npmjs.com/package/@asoftwareworld/form-builder">
+    <img src="https://circleci.com/gh/asoftwareworld/ASW-Form-Builder.svg?style=svg" alt="Asw form builder on npm" />
+  </a>&nbsp;
+  <a href="https://github.com/asoftwareworld/ASW-Form-Builder/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Discord conversation" />
+  </a>
+</p>
 
+<hr>
 
+# Documentation
 
-## Frameworks
-1. [AngularJS](http://angularjs.org/) 1.2.32
-2. [jQuery](http://jquery.com/) 3.3.1
-3. [Bootstrap 3](http://getbootstrap.com/)
-4. [angular-validator](https://github.com/kelp404/angular-validator)
+`ASW Form Builder` helps you with rapid development and designed web forms which includes several controls. The key feature of `Form Builder` is to make your content attractive and effective. We can customize our control at run time and preview the same before final submission.
 
+`Form Builder` is compatible with the latest version of Angular and Angular Material. Only a few clicks can create an attractive web form and provide a JSON Schema to render all controls.
 
+## Installation
+Below are some prerequisites before install `Form Builder`.
 
-
-## $builder
-```coffee
-# just $builder
-angular.module 'yourApp', ['builder']
-
-# include $builder and default components
-angular.module 'yourApp', ['builder', 'builder.components']
-```
-
-
-#### components
-```coffee
-###
-All components.
-###
-$builder.components =
-    componentName{string}: component{object}
-```
-
-
-#### groups
-```coffee
-###
-All groups of components.
-###
-$builder.groups = [componentGroup{string}]
-```
-
-
-#### registerComponent
-```coffee
-# .config
-$builderProvider.registerComponent = (name, component={}) ->
-    ###
-    Register the component for form-builder.
-    @param name: The component name.
-    @param component: The component object.
-        group: {string} The component group.
-        label: {string} The label of the input.
-        description: {string} The description of the input.
-        placeholder: {string} The placeholder of the input.
-        editable: {bool} Is the form object editable?
-        required: {bool} Is the form object required?
-        validation: {string} angular-validator. "/regex/" or "[rule1, rule2]". (default is '/.*/')
-        validationOptions: {array} [{rule: angular-validator, label: 'option label'}] the options for the validation. (default is [])
-        options: {array} The input options.
-        arrayToText: {bool} checkbox could use this to convert input (default is no)
-        template: {string} html template
-        templateUrl: {string} The url of the template.
-        popoverTemplate: {string} html template
-        popoverTemplateUrl: {string} The url of the popover template.
-    ###
-# .run
-$builder.registerComponent = (name, component={}) ->
-```
-
-**component.template**
-```html
-<div class="form-group">
-    <label for="{{name+index}}" class="col-md-4 control-label" ng-class="{'fb-required':required}">{{label}}</label>
-    <div class="col-md-8">
-        <input type="text" ng-model="inputText" validator-required="{{required}}" id="{{name+index}}" class="form-control" placeholder="{{placeholder}}"/>
-        <p class='help-block'>{{description}}</p>
-    </div>
-</div>
-```
-
-**component.popoverTemplate**
-```html
-<form>
-    <div class="form-group">
-        <label class='control-label'>Label</label>
-        <input type='text' ng-model="label" validator="[required]" class='form-control'/>
-    </div>
-    <div class="form-group">
-        <label class='control-label'>Description</label>
-        <input type='text' ng-model="description" class='form-control'/>
-    </div>
-    <div class="form-group">
-        <label class='control-label'>Placeholder</label>
-        <input type='text' ng-model="placeholder" class='form-control'/>
-    </div>
-    <div class="checkbox">
-        <label>
-            <input type='checkbox' ng-model="required" />
-            Required</label>
-    </div>
-    <div class="form-group" ng-if="validationOptions.length > 0">
-        <label class='control-label'>Validation</label>
-        <select ng-model="$parent.validation" class='form-control' ng-options="option.rule as option.label for option in validationOptions"></select>
-    </div>
-    <hr/>
-    <div class='form-group'>
-        <input type='submit' ng-click="popover.save($event)" class='btn btn-primary' value='Save'/>
-        <input type='button' ng-click="popover.cancel($event)" class='btn btn-default' value='Cancel'/>
-        <input type='button' ng-click="popover.remove($event)" class='btn btn-danger' value='Delete'/>
-    </div>
-</form>
-```
-
-
-#### forms
-```coffee
-###
-builder mode: `fb-builder` you could drag and drop to build the form.
-form mode: `fb-form` this is the form for end-user to input value.
-Default is {default: []}
-###
-$builder.forms =
-    formName{string}: formObjects{array}
-```
-
-
-#### insertFormObject
-```coffee
-$builder.insertFormObject = (name, index, formObject={}) =>
-    ###
-    Insert the form object into the form at {index}.
-    @param name: The form name.
-    @param index: The form object index.
-    @param form: The form object.
-        id: The form object id.
-        component: {string} The component name
-        editable: {bool} Is the form object editable? (default is yes)
-        label: {string} The form object label.
-        description: {string} The form object description.
-        placeholder: {string} The form object placeholder.
-        options: {array} The form object options.
-        required: {bool} Is the form object required? (default is no)
-        validation: {string} angular-validator. "/regex/" or "[rule1, rule2]".
-        [index]: {int} The form object index. It will be generated by $builder.
-    @return: The form object.
-    ###
-```
-
-#### addFormObject
-```coffee
-$builder.addFormObject = (name, formObject={}) =>
-    ###
-    Insert the form object into the form at last.
-    reference $builder.insertFormObject()
-    ###
-```
-
-#### removeFormObject
-```coffee
-$builder.removeFormObject = (name, index) =>
-    ###
-    Remove the form object by the index.
-    @param name: {string} The form name.
-    @param index: {int} The form object index.
-    ###
-```
-
-
-
-
-## builder.directive
-#### fb-components
-```coffee
-a = angular.module 'builder.directive', ['builder.provider', 'builder.controller', 'builder.drag', 'validator']
-fbComponents = ->
-    ###
-    You could use `fb-components` to render the components view.
-    ###
-    restrict: 'A'
-    template:
-        """
-        <ul ng-if="groups.length > 1" class="nav nav-tabs nav-justified">
-            <li ng-repeat="group in groups" ng-class="{active:activeGroup==group}">
-                <a href='#' ng-click="selectGroup($event, group)">{{group}}</a>
-            </li>
-        </ul>
-        <div class='form-horizontal'>
-            <div class='fb-component' ng-repeat="component in components"
-                fb-component="component"></div>
-        </div>
-        """
-    controller: 'fbComponentsController'
-a.directive 'fbComponents', fbComponents
-```
+### Step 1: Install Angular Material
+Install `Angular Material` by running the following command:
 
 ```html
-<div fb-components></div>
+ng add @angular/material
 ```
 
-
-#### fb-builder
-```coffee
-a = angular.module 'builder.directive', ['builder.provider', 'builder.controller', 'builder.drag', 'validator']
-fbBuilder = ($injector) ->
-    ###
-    You could use `fb-builder="formName"` to render the builder view.
-    ###
-    restrict: 'A'
-    template:
-        """
-        <div class='form-horizontal'>
-            <div class='fb-form-object-editable' ng-repeat="object in formObjects"
-                fb-form-object-editable="object"></div>
-        </div>
-        """
-    link: (scope, element, attrs) ->
-fbBuilder.$inject = ['$injector']
-a.directive 'fbBuilder', fbBuilder
+### Step 2: Install Bootstrap
+Install `Bootstrap` source Sass files by running the following command:
+```html
+npm install bootstrap
 ```
+
+### Step 3: Install ASW Form Builder
+Install `Form Builder` to set up in the project by running the following command:
+```html
+npm install @asoftwareworld/form-builder
+```
+
+### Step 4: Import the component modules
+Import the NgModule for each component you want to use:
+
+```
+import { AswFormBuilderModule } from '@asoftwareworld/form-builder/form-builder';
+import { AswPreviewTemplateModule } from '@asoftwareworld/form-builder/preview-template';
+// ...
+
+@NgModule({
+  imports: [
+    // shown passing global defaults (optional)
+    AswFormBuilderModule,
+    AswPreviewTemplateModule
+    ...
+  ]
+  // ...
+})
+export class AppModule {}
+```
+### Step 5: Include a theme
+
+Including a theme is required to apply the form builder and controls design.
+
+You can include this theme in component `SCSS or CSS` files to not use this globally in your application.
 
 ```html
-<div fb-builder="default"></div>
+@import '~@asoftwareworld/form-builder/theme/asw-theme.min.css';
 ```
 
+If you're using the Angular CLI, and you want to use themes globally in your application. Then you can add this to your `styles.css` or `angular.json`:
 
-#### fb-form
-```coffee
-a = angular.module 'builder.directive', ['builder.provider', 'builder.controller', 'builder.drag', 'validator']
-fbForm = ($injector) ->
-    ###
-    You could use `fb-form="formName"` to render the form view for end-users.
-    ###
-    restrict: 'A'
-    require: 'ngModel'  # form data (end-user input value)
-    scope:
-        # input model for scops in ng-repeat
-        input: '=ngModel'
-    template:
-        """
-        <div class='fb-form-object' ng-repeat="object in form" fb-form-object="object">
-        </div>
-        """
-    controller: 'fbFormController'
-    link: (scope, element, attrs) ->
-fbForm.$inject = ['$injector']
-a.directive 'fbForm', fbForm
-```
+`styles.css or styles.scss`:
 
 ```html
-<form class="form-horizontal">
-    <div ng-model="input" fb-form="default" fb-default="defaultValue"></div>
-    <div class="form-group">
-        <div class="col-md-8 col-md-offset-4">
-            <input type="submit" ng-click="submit()" class="btn btn-default"/>
-        </div>
-    </div>
-</form>
+@import '~@asoftwareworld/form-builder/theme/asw-theme.min.css';
+```
+or 
+
+`angular.json`:
+```html
+"styles": [
+  "./node_modules/@asoftwareworld/form-builder/theme/asw-theme.min.css"
+],
 ```
 
+If you are not using the Angular CLI, you can include a theme via a `<link>` element in your `index.html`.
 
-
-
-## builder.components
-> There are some default components at this module. This module is not required.
-+ textInput
-+ textArea
-+ checkbox
-+ radio
-+ select
-
-
-
-
-## Unit Test
-```bash
-$ npm test
+## Add a selector to HTML
+In your template, use the component selector:
+```
+<asw-form-builder [uploadData]="jsonData1"
+                [isShowPreviewButton]="isShowPreviewButton"
+                [isShowJsonDataButton]="isShowJsonDataButton"
+                [isShowPublishButton]="isShowPublishButton"
+                (publishClick)="saveJsonData($event)" 
+                (previewClick)="previewTemplate($event)"
+                (buttonClick)="buttonClick($event)"
+                (aswModelChange)="onSelectionChange($event)"></asw-form-builder>
+```
+Preview Template, use the component selector in your HTML page:
+```
+<asw-preview-template [formContainer]="jsonData" 
+    (buttonClick)="buttonClick($event)"
+    (aswModelChange)="onSelectionChange($event)">
+</asw-preview-template>
 ```
 
+Define in your component to get published event :
 
-
-
-## Development
-```bash
-# install node modules
-$ npm install
-# install bower components
-$ bower install
 ```
-```bash
-# run the local server and the file watcher to compile CoffeeScript
-$ grunt dev
-# compile coffee script and minify
-$ grunt build
+export class AppComponent {
+    title = 'ASW Form Builder Demo';
+    jsonData: any[] = [];
+    jsonData1: any[] = [];
+    isShowPreviewButton = false;
+    isShowJsonDataButton = true;
+    isShowPublishButton = false;
+    
+    // Publish Template
+    saveJsonData(data: any){
+        //.... 
+        console.log(data);
+        // do something
+    }
+    
+    //Preview Template
+    previewTemplate(data: any){
+        this.jsonData = data;
+    }
+
+    buttonClick(data: any): void {
+        console.log(data);
+    }
+
+    onSelectionChange(control: any): void {
+        console.log(control);
+    }
+}
 ```
+## Theme
+Angular Material [more information](https://material.angular.io/components/categories) 
+and Bootstrap [more information](https://getbootstrap.com/docs/4.0/getting-started/theming/)
+
+## List of Controls available
+| controls        | description                                                                                                     |
+| --------------- | --------------------------------------------------------------------------------------------------------------- |
+| Header          | Headings are defined with the `<h1> to <h6>` tags. Used as a title of the post, template and resume, etc.       |
+| Image Upload    | Upload image with crop, zoom in, zoom out, reset, rotate, swap etc. features.                                   |
+| Autocomplete    | The autocomplete is a normal text input enhanced by a panel of suggested relevant options as the user types.    |
+| Text field      | Enable native inputs to be used within a form field. The styles such as the underline, floating label.          |
+| Text area       | Enable native inputs to be used within a form field. The styles such as the underline, floating label.          |
+| Datepicker      | The datepicker allows users to enter a date either through text input, or by choosing a date from the calendar. |
+| Select          | Allows the user to select only one option using dropdown.                                                       |
+| Multi select    | Allows the user to select one or more options using dropdown.                                                   |
+| Radio button    | Allows the user to select only one option from a group.                                                         |
+| Checkbox button | Use multi select check box or single checkbox and captures boolean input with an optional indeterminate mode.   |
+| Button          | Angular Material interactive button with a range of presentation options.                                       |
+| Paragraph       | Paragraphs are the building blocks of papers.                                                                   |
+| Divider         | Create a horizontal or vertical line styled with a Angular Material theme                                       |
+| Slide toggle    | Is an on/off control that can be toggled via clicking and draggable switch.                                     |
+| Grid            | Configure bootstrap’s grid system uses a series of containers, rows, and columns to layout and align content.   |
+| GPS             | Add google map key in [index.html](https://github.com/asoftwareworld/ASW-Form-Builder/blob/master/src/index.html) file to use GPS feature.|
+| QR Code         | ASW QR Code library for generating QR Code for Angular projects. [Readme](https://github.com/asoftwareworld/asw-qr-code/blob/main/README.md) file to use feature.|
+| Signature       | This control allow for digital signature and display the result. (Uses canvas & fabric.js).|
+| Image Drawing   | This control allow to draw on Image and display the result. (Uses canvas & fabric.js).|
+
+
+## Browser Support
+
+| ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | 
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | 
+| Latest ✔                                                                                 | Latest ✔                                                                                    | Latest ✔                                                                                 | Latest ✔                                                                              | Latest ✔                                                                                                                                                                                                    |
+## [Report a bug](https://github.com/asoftwareworld/ASW-Form-Builder/issues)
+We use GitHub Issues as the official bug tracker for the ASW Form Builder. Here are some advices for our users that want to report an issue:
+
+1. Make sure that you are using the latest version of the ASW Form Builder.
+2. Providing us reproducible steps for the issue will shorten the time it takes for it to be fixed.
+3. Some issues may be browser specific, so specifying in what browser you encountered the issue might help.
+
+## Technical Support or Questions
+If you have questions or need help please email `asoftwareworld@gmail.com`
+
+## License
+[MIT](https://github.com/asoftwareworld/ASW-Form-Builder/blob/master/LICENSE)
+
+## Social Media
+
+Twitter: <https://twitter.com/asoftwareworld>
+
+LinkedIn: <https://in.linkedin.com/company/asoftwareworld>
+
+Facebook: <https://www.facebook.com/asoftwaresworld>
+
+(https://github.com/asoftwareworld/ASW-Form-Builder)
+
+**Love ASW Form Builder? Give our repo a star :star: :arrow_up:.**
+
+## Donate
+<a href="https://ko-fi.com/anishsharma"><img src="blue.svg" height="40"></a>  
+If this project help you reduce time to develop, you can give me a cup of coffee :)
